@@ -20,7 +20,7 @@
     - certbot_setup
 
 - name: run certbot for {{ item }}
-  shell: certbot --nginx certonly -d {{ item }} --noninteractive
+  shell: certbot --nginx certonly -d {{ item }} --noninteractive --agree-tos --email {{ certbot_email }}
   with_items: "{{ certbot_sites[inventory_hostname] | default([]) }}"
   tags:
     - certbot
