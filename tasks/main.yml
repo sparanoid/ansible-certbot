@@ -1,6 +1,13 @@
 #
 # setup certbot
 #
+- name: enable {{ item }} channel
+  command: "yum-config-manager --enable {{ item }}"
+  with_items: "{{ certbot_repos }}"
+  tags:
+    - certbot
+    - certbot_setup
+
 - name: install certbot dependencies
   yum:
     name: "{{ item }}"
