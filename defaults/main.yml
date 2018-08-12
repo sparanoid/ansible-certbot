@@ -1,0 +1,6 @@
+---
+certbot_dependencies:
+  - yum-utils
+certbot_packages:
+  - python2-certbot-nginx
+certbot_sites: []
