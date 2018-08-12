@@ -1,0 +1,37 @@
+#
+# setup certbot
+#
+- name: install certbot dependencies
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ certbot_dependencies }}"
+  tags:
+    - certbot
+    - certbot_setup
+
+- name: install certbot
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ certbot_packages }}"
+  tags:
+    - certbot
+    - certbot_setup
+
+- name: run certbot for {{ item }}
+  shell: certbot --nginx certonly -d {{ item }} --noninteractive
+  with_items: "{{ certbot_sites[inventory_hostname] | default([]) }}"
+  tags:
+    - certbot
+    - certbot_generate
+
+- name: create certbot cron
+  cron:
+    name: certbot renew
+    minute: 0
+    hour: 0,12
+    job: "certbot renew --noninteractive --post-hook 'systemctl restart nginx'"
+  tags:
+    - certbot
+    - certbot_setup
