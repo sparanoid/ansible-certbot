@@ -1,4 +1,7 @@
 ---
+certbot_repos:
+  - rhui-REGION-rhel-server-extras
+  - rhui-REGION-rhel-server-optional
 certbot_dependencies:
   - yum-utils
   - python-urllib3
