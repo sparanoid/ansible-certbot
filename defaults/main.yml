@@ -1,6 +1,9 @@
 ---
 certbot_dependencies:
   - yum-utils
+  - python-urllib3
+  - python-requests
 certbot_packages:
   - python2-certbot-nginx
+certbot_email: me@example.com
 certbot_sites: []
