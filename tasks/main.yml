@@ -1,7 +1,7 @@
 #
 # setup certbot
 #
-- name: enable {{ item }} channel
+- name: enable repos
   command: "yum-config-manager --enable {{ item }}"
   with_items: "{{ certbot_repos }}"
   tags:
@@ -26,7 +26,7 @@
     - certbot
     - certbot_setup
 
-- name: run certbot for {{ item }}
+- name: run certbot
   shell: certbot --nginx certonly -d {{ item }} --noninteractive --agree-tos --email {{ certbot_email }}
   with_items: "{{ certbot_sites[inventory_hostname] | default([]) }}"
   tags:
