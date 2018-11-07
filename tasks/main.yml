@@ -42,3 +42,14 @@
   tags:
     - certbot
     - certbot_setup
+
+# TODO: need refine: https://github.com/certbot/certbot/issues/4937
+- name: fix for certbot cron cannot find nginx binary
+  file:
+    src: /usr/sbin/nginx
+    dest: /usr/bin/nginx
+    state: link
+  ignore_errors: yes
+  tags:
+    - certbot
+    - certbot_setup
