@@ -10,18 +10,16 @@
 
 - name: install certbot dependencies
   yum:
-    name: "{{ item }}"
+    name: "{{ certbot_dependencies }}"
     state: present
-  with_items: "{{ certbot_dependencies }}"
   tags:
     - certbot
     - certbot_setup
 
 - name: install certbot
   yum:
-    name: "{{ item }}"
+    name: "{{ certbot_packages }}"
     state: present
-  with_items: "{{ certbot_packages }}"
   tags:
     - certbot
     - certbot_setup
