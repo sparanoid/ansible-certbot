@@ -9,4 +9,6 @@ certbot_dependencies:
 certbot_packages:
   - python2-certbot-nginx
 certbot_email: me@example.com
+certbot_nginx_ctl: /usr/sbin/nginx
+certbot_nginx_server_root: /etc/nginx
 certbot_sites: []
