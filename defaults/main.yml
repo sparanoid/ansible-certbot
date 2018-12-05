@@ -11,4 +11,5 @@ certbot_packages:
 certbot_email: me@example.com
 certbot_nginx_ctl: /usr/sbin/nginx
 certbot_nginx_server_root: /etc/nginx
+certbot_additional_options: --preferred-challenges http
 certbot_sites: []
