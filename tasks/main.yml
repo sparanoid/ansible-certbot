@@ -25,7 +25,7 @@
     - certbot_setup
 
 - name: run certbot
-  shell: certbot --nginx certonly -d {{ item }} --noninteractive --agree-tos --email {{ certbot_email }}
+  shell: certbot --nginx certonly -d {{ item }} --expand --noninteractive --agree-tos --email {{ certbot_email }}
   with_items: "{{ certbot_sites[inventory_hostname] | default([]) }}"
   tags:
     - certbot
