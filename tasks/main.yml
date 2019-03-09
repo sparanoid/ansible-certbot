@@ -8,10 +8,20 @@
     - certbot
     - certbot_setup
 
+# Try the following method if you failed to install certbot:
+# https://github.com/certbot/certbot/issues/5104#issuecomment-355020248
+- name: remove corrupted pip dependencies
+  pip:
+    name: urllib3
+    state: absent
+  tags:
+    - certbot
+    - certbot_setup
+
 - name: install certbot dependencies
   yum:
     name: "{{ certbot_dependencies }}"
-    state: present
+    state: latest
   tags:
     - certbot
     - certbot_setup
@@ -19,13 +29,81 @@
 - name: install certbot
   yum:
     name: "{{ certbot_packages }}"
-    state: present
+    state: latest
   tags:
     - certbot
     - certbot_setup
 
+- name: check certbot-dns-cloudflare
+  when: certbot_dns_cloudflare_enabled
+  tags:
+    - certbot
+    - certbot_setup
+    - certbot_setup_plugin
+  block:
+    - name: install certbot-dns-cloudflare
+      yum:
+        name: "{{ certbot_dns_cloudflare_packages }}"
+        state: latest
+
+    - name: update credentials for cloudflare
+      ini_file:
+        path: ~/.secrets/certbot/cloudflare.ini
+        section: "{{ item.section }}"
+        option: "{{ item.option }}"
+        value: "{{ item.value }}"
+        mode: 0600
+        no_extra_spaces: yes
+      with_items: "{{ certbot_dns_cloudflare_credentials }}"
+      tags:
+        - certbot_setup_plugin_credentials
+
+- name: check certbot-dns-route53
+  when: certbot_dns_route53_enabled
+  tags:
+    - certbot
+    - certbot_setup
+    - certbot_setup_plugin
+  block:
+    - name: install certbot-dns-route53
+      yum:
+        name: "{{ certbot_dns_route53_packages }}"
+        state: latest
+
+    - name: update credentials for route53
+      ini_file:
+        path: ~/.aws/config
+        section: "{{ item.section }}"
+        option: "{{ item.option }}"
+        value: "{{ item.value }}"
+        mode: 0600
+        no_extra_spaces: yes
+      with_items: "{{ certbot_dns_route53_credentials }}"
+      tags:
+        - certbot_setup_plugin_credentials
+
+- name: check certbot-nginx
+  when: certbot_nginx_enabled
+  tags:
+    - certbot
+    - certbot_setup
+    - certbot_setup_plugin
+  block:
+    - name: install certbot-nginx
+      yum:
+        name: "{{ certbot_nginx_packages }}"
+        state: latest
+
+    # TODO: need refine: https://github.com/certbot/certbot/issues/4937
+    - name: fix for certbot cron cannot find nginx binary
+      file:
+        src: /usr/sbin/nginx
+        dest: /usr/bin/nginx
+        state: link
+      ignore_errors: yes
+
 - name: run certbot
-  shell: certbot --nginx certonly -d {{ item }} --expand --noninteractive --agree-tos --email {{ certbot_email }}
+  shell: certbot --{{ item.plugin | default("nginx") }} certonly -d {{ item.domain }} --expand --noninteractive --agree-tos --email {{ certbot_email }} {{ item.args | default("") }}
   with_items: "{{ certbot_sites[inventory_hostname] | default([]) }}"
   tags:
     - certbot
@@ -40,14 +118,4 @@
   tags:
     - certbot
     - certbot_setup
-
-# TODO: need refine: https://github.com/certbot/certbot/issues/4937
-- name: fix for certbot cron cannot find nginx binary
-  file:
-    src: /usr/sbin/nginx
-    dest: /usr/bin/nginx
-    state: link
-  ignore_errors: yes
-  tags:
-    - certbot
-    - certbot_setup
+    - certbot_setup_cron

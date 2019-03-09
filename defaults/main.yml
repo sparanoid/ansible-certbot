@@ -2,14 +2,32 @@
 certbot_repos:
   - rhui-REGION-rhel-server-extras
   - rhui-REGION-rhel-server-optional
+certbot_packages: certbot
 certbot_dependencies:
   - yum-utils
   - python-urllib3
   - python-requests
-certbot_packages:
-  - python2-certbot-nginx
-certbot_email: me@example.com
+
+# dns-cloudflare
+certbot_dns_cloudflare_enabled: yes
+certbot_dns_cloudflare_packages: python2-certbot-dns-cloudflare
+certbot_dns_cloudflare_credentials:
+  - { option: 'dns_cloudflare_email', value: 'your_cf_access_key', section: null }
+  - { option: 'dns_cloudflare_api_key', value: 'your_cf_secret_key', section: null }
+
+# dns-route53
+certbot_dns_route53_enabled: yes
+certbot_dns_route53_packages: python2-certbot-dns-route53
+certbot_dns_route53_credentials:
+  - { option: 'aws_access_key_id', value: 'your_aws_access_key', section: 'default' }
+  - { option: 'aws_secret_access_key', value: 'your_aws_secret_key', section: 'default' }
+
+# nginx
+certbot_nginx_enabled: yes
+certbot_nginx_packages: python2-certbot-nginx
 certbot_nginx_ctl: /usr/sbin/nginx
 certbot_nginx_server_root: /etc/nginx
-certbot_additional_options: --preferred-challenges http
+
+certbot_email: me@example.com
+certbot_additional_options: ""
 certbot_sites: []
