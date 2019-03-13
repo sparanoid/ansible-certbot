@@ -1,4 +1,4 @@
-# sparanoid.certbot
+# sparanoid-certbot
 
 Ansible role for python2-certbot
 
