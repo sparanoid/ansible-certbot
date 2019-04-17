@@ -114,7 +114,7 @@
     name: certbot renew
     minute: 0
     hour: 0,12
-    job: "certbot renew --nginx-ctl {{ certbot_nginx_ctl }} --nginx-server-root {{ certbot_nginx_server_root }} {{ certbot_additional_options }} --noninteractive --post-hook 'systemctl restart nginx'"
+    job: "certbot renew --nginx-ctl {{ certbot_nginx_ctl }} --nginx-server-root {{ certbot_nginx_server_root }} {{ certbot_additional_options }} --noninteractive --post-hook 'systemctl force-reload nginx'"
   tags:
     - certbot
     - certbot_setup
