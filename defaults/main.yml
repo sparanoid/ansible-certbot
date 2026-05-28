@@ -9,21 +9,21 @@ certbot_dependencies:
   - python-requests
 
 # dns-cloudflare
-certbot_dns_cloudflare_enabled: yes
+certbot_dns_cloudflare_enabled: true
 certbot_dns_cloudflare_packages: python2-certbot-dns-cloudflare
 certbot_dns_cloudflare_credentials:
   - { option: 'dns_cloudflare_email', value: 'your_cf_access_key', section: null }
   - { option: 'dns_cloudflare_api_key', value: 'your_cf_secret_key', section: null }
 
 # dns-route53
-certbot_dns_route53_enabled: yes
+certbot_dns_route53_enabled: true
 certbot_dns_route53_packages: python2-certbot-dns-route53
 certbot_dns_route53_credentials:
   - { option: 'aws_access_key_id', value: 'your_aws_access_key', section: 'default' }
   - { option: 'aws_secret_access_key', value: 'your_aws_secret_key', section: 'default' }
 
 # nginx
-certbot_nginx_enabled: yes
+certbot_nginx_enabled: true
 certbot_nginx_packages: python2-certbot-nginx
 certbot_nginx_ctl: /usr/sbin/nginx
 certbot_nginx_server_root: /etc/nginx

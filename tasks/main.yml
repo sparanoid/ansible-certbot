@@ -53,7 +53,7 @@
         option: "{{ item.option }}"
         value: "{{ item.value }}"
         mode: 0600
-        no_extra_spaces: yes
+        no_extra_spaces: true
       with_items: "{{ certbot_dns_cloudflare_credentials }}"
       tags:
         - certbot_setup_plugin_credentials
@@ -77,7 +77,7 @@
         option: "{{ item.option }}"
         value: "{{ item.value }}"
         mode: 0600
-        no_extra_spaces: yes
+        no_extra_spaces: true
       with_items: "{{ certbot_dns_route53_credentials }}"
       tags:
         - certbot_setup_plugin_credentials
@@ -100,7 +100,7 @@
         src: /usr/sbin/nginx
         dest: /usr/bin/nginx
         state: link
-      ignore_errors: yes
+      ignore_errors: true
 
 - name: run certbot
   shell: certbot --{{ item.plugin | default("nginx") }} certonly -d {{ item.domain }} --expand --noninteractive --agree-tos --email {{ certbot_email }} {{ item.args | default("") }}
